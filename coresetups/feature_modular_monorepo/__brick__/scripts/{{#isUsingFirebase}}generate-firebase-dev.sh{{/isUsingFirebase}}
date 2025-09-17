@@ -1,0 +1,9 @@
+PROJECT_ROOT_PATH=$1
+
+flutterfire config \
+    --project={{firebaseProjectDev}} \
+    --out=$PROJECT_ROOT_PATH/app/{{appName.snakeCase()}}/lib/config/firebase_options_dev.dart \
+    --ios-bundle-id={{domain.lowerCase()}}.{{organization.camelCase()}}.{{appName.camelCase()}}.dev \
+    --ios-out=$PROJECT_ROOT_PATH/app/{{appName.snakeCase()}}/ios/flavors/dev/GoogleService-Info.plist \
+    --android-package-name={{domain.lowerCase()}}.{{organization.snakeCase()}}.{{appName.snakeCase()}}.dev \
+    --android-out=$PROJECT_ROOT_PATH/app/{{appName.snakeCase()}}/android/app/src/development/google-services.json

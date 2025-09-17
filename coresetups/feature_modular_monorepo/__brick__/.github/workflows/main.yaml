@@ -1,0 +1,24 @@
+name: ci
+
+permissions: write-all
+
+concurrency:
+  group: {{{ githubWorkflow }}}-{{{ githubRef }}}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+
+jobs:
+  semantic_pull_request:
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
+
+  test_with_coverage:
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    uses: ./.github/workflows/_test_with_coverage.yaml
+    secrets: inherit

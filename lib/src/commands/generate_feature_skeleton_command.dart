@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:archipelago_cli/bundle/feature_monorepo_skeleton_bundle.dart';
+import 'package:fquick_cli/bundle/feature_monorepo_skeleton_bundle.dart';
 import 'package:args/command_runner.dart';
 import 'package:mason/mason.dart';
 

@@ -1,0 +1,73 @@
+flavors:
+  development:
+    app:
+      name: "{{appName.titleCase()}} [Dev]"
+    android:
+      flavorDimension: "app"
+      applicationId: "{{domain.dotCase()}}.{{organization.snakeCase()}}.{{appName.snakeCase()}}.dev"
+      icon: "launcher/logo-dev.png"
+      adaptiveIcon:
+        background: "launcher/logo-background-dev.png"
+        foreground: "launcher/logo-foreground.png"
+    ios:
+      bundleId: "{{domain.dotCase()}}.{{organization.snakeCase()}}.{{appName.snakeCase()}}.dev"
+      icon: "launcher/ios-logo-dev.png"
+  staging:
+    app:
+      name: "{{appName.titleCase()}} [STG]"
+    android:
+      flavorDimension: "app"
+      applicationId: "{{domain.dotCase()}}.{{organization.snakeCase()}}.{{appName.snakeCase()}}.stg"
+      icon: "launcher/logo-stg.png"
+      adaptiveIcon:
+        background: "launcher/logo-background-stg.png"
+        foreground: "launcher/logo-foreground.png"
+    ios:
+      bundleId: "{{domain.dotCase()}}.{{organization.snakeCase()}}.{{appName.snakeCase()}}.stg"
+      icon: "launcher/ios-logo-stg.png"
+  production:
+    app:
+      name: "{{appName.titleCase()}}"
+    android:
+      flavorDimension: "app"
+      applicationId: "{{domain.dotCase()}}.{{organization.snakeCase()}}.{{appName.snakeCase()}}"
+      icon: "launcher/logo.png"
+      adaptiveIcon:
+        background: "launcher/logo-background.png"
+        foreground: "launcher/logo-foreground.png"
+    ios:
+      bundleId: "{{domain.dotCase()}}.{{organization.snakeCase()}}.{{appName.snakeCase()}}"
+      icon: "launcher/ios-logo.png"
+
+instructions:
+  - assets:download
+  - assets:extract
+  - android:androidManifest
+  - android:buildGradle
+  - android:dummyAssets
+  - android:icons
+  - flutter:flavors
+  - flutter:app
+  - flutter:pages
+  - flutter:main
+  - flutter:targets
+  - ios:podfile
+  - ios:xcconfig
+  - ios:buildTargets
+  - ios:schema
+  - ios:dummyAssets
+  - ios:icons
+  - ios:plist
+  - ios:launchScreen
+  - macos:podfile
+  - macos:xcconfig
+  - macos:configs
+  - macos:buildTargets
+  - macos:schema
+  - macos:dummyAssets
+  - macos:icons
+  - macos:plist
+  - google:firebase
+  - huawei:agconnect
+  - assets:clean
+  - ide:config

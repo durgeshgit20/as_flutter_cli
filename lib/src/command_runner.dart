@@ -1,26 +1,26 @@
-import 'package:archipelago_cli/src/commands/commands.dart';
-import 'package:archipelago_cli/src/utils/utils.dart';
-import 'package:archipelago_cli/src/version.dart';
+import 'package:fquick_cli/src/commands/commands.dart';
+import 'package:fquick_cli/src/utils/utils.dart';
+import 'package:fquick_cli/src/version.dart';
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:cli_completion/cli_completion.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:pub_updater/pub_updater.dart';
 
-const executableName = 'archipelago';
-const packageName = 'archipelago_cli';
-const description = 'Archipelago CLI to use Archipelago Flutter Starter kit.';
+const executableName = 'fquick';
+const packageName = 'fquick_cli';
+const description = 'F-Quick CLI to use as a Flutter Starter kit.';
 
 /// {@template archipelago_cli_command_runner}
 /// A [CommandRunner] for the CLI.
 ///
 /// ```bash
-/// $ archipelago --version
+/// $ fquick --version
 /// ```
 /// {@endtemplate}
-class ArchipelagoCliCommandRunner extends CompletionCommandRunner<int> {
+class FQuickCliCommandRunner extends CompletionCommandRunner<int> {
   /// {@macro archipelago_cli_command_runner}
-  ArchipelagoCliCommandRunner({
+  FQuickCliCommandRunner({
     Logger? logger,
     PubUpdater? pubUpdater,
   })  : _logger = logger ?? Logger(),
@@ -143,6 +143,9 @@ class ArchipelagoCliCommandRunner extends CompletionCommandRunner<int> {
           ..info('')
           ..info(
             '''
+
+
+
 ${lightYellow.wrap('Update available!')} ${lightCyan.wrap(packageVersion)} \u2192 ${lightCyan.wrap(latestVersion)}
 Run ${lightCyan.wrap('$executableName update')} to update''',
           );

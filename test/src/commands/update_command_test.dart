@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:archipelago_cli/src/command_runner.dart';
-import 'package:archipelago_cli/src/commands/commands.dart';
-import 'package:archipelago_cli/src/version.dart';
+import 'package:fquick_cli/src/command_runner.dart';
+import 'package:fquick_cli/src/commands/commands.dart';
+import 'package:fquick_cli/src/version.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pub_updater/pub_updater.dart';
@@ -20,14 +20,14 @@ void main() {
   group('update', () {
     late PubUpdater pubUpdater;
     late Logger logger;
-    late ArchipelagoCliCommandRunner commandRunner;
+    late FQuickCliCommandRunner commandRunner;
 
     setUp(() {
       final progress = _MockProgress();
       final progressLogs = <String>[];
       pubUpdater = _MockPubUpdater();
       logger = _MockLogger();
-      commandRunner = ArchipelagoCliCommandRunner(
+      commandRunner = FQuickCliCommandRunner(
         logger: logger,
         pubUpdater: pubUpdater,
       );

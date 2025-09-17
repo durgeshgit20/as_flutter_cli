@@ -1,0 +1,51 @@
+name: flutter_modular_monorepo
+description: "A comprehensive Flutter monorepo template using Mason CLI, designed to create a modular and scalable project structure. This brick sets up a well-organized monorepo with shared packages, feature modules, and core infrastructure, facilitating efficient development of large-scale Flutter applications."
+version: 0.1.0+1
+environment:
+  mason: 0.1.0
+vars:
+  appName:
+    type: string
+    description: The name of your application. This will be used throughout the project for naming and identification purposes.
+    default: Dash
+    prompt: "What is the name of your application?"
+  organization:
+    type: string
+    description: The name of your organization or company. This will be used in package identifiers and other organizational contexts.
+    default: Banua Coder
+    prompt: "What is the name of your organization or company?"
+  domain:
+    type: string
+    description: "The top-level domain of your organization. This is typically used in reverse domain name notation for package identifiers."
+    default: com
+    prompt: "What is your organization's top-level domain? (e.g., com, org, io)"
+  prefix:
+    type: string
+    description: "A short prefix to be used for naming components and packages. This helps in organizing and identifying project-specific elements."
+    prompt: "What prefix would you like to use for your project components? (e.g., 'my' for MyButton, MYWidget)"
+  prefixCasing:
+    type: enum
+    description: The casing style to be applied to the prefix. This affects how the prefix will appear in component names.
+    default: Pascal Case
+    prompt: "How should the prefix be cased in component names?"
+    values:
+      - Upper Case
+      - Pascal Case
+  networkLibrary:
+    type: enum
+    description: The network library to be used for HTTP requests.
+    default: dio
+    prompt: "Which network library do you want to use?"
+    values:
+      - dio
+      - http
+  includeGenerated:
+    type: boolean
+    description: Determines whether generated files should be included in version control. This affects which files are tracked by Git.
+    default: false
+    prompt: "Should generated files be included in Git version control? (yes/no)"
+  isUsingFirebase:
+    type: boolean
+    description: Determines whether to install firebase or not.
+    default: false
+    prompt: "Is this project using firebase? (yes/no)"

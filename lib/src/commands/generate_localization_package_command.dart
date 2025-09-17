@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:archipelago_cli/bundle/flutter_l10n_package_bundle.dart';
+import 'package:fquick_cli/bundle/flutter_l10n_package_bundle.dart';
 import 'package:args/command_runner.dart';
 import 'package:mason/mason.dart';
 import 'package:path/path.dart';

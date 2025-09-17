@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:archipelago_cli/src/command_runner.dart';
-import 'package:archipelago_cli/src/version.dart';
+import 'package:fquick_cli/src/command_runner.dart';
+import 'package:fquick_cli/src/version.dart';
 import 'package:args/command_runner.dart';
 import 'package:cli_completion/cli_completion.dart';
 import 'package:mason_logger/mason_logger.dart';
@@ -25,7 +25,7 @@ void main() {
   group('ArchipelagoCliCommandRunner', () {
     late PubUpdater pubUpdater;
     late Logger logger;
-    late ArchipelagoCliCommandRunner commandRunner;
+    late FQuickCliCommandRunner commandRunner;
 
     setUp(() {
       pubUpdater = _MockPubUpdater();
@@ -36,7 +36,7 @@ void main() {
 
       logger = _MockLogger();
 
-      commandRunner = ArchipelagoCliCommandRunner(
+      commandRunner = FQuickCliCommandRunner(
         logger: logger,
         pubUpdater: pubUpdater,
       );
@@ -100,7 +100,7 @@ void main() {
 
     test('can be instantiated without an explicit analytics/logger instance',
         () {
-      final commandRunner = ArchipelagoCliCommandRunner();
+      final commandRunner = FQuickCliCommandRunner();
       expect(commandRunner, isNotNull);
       expect(commandRunner, isA<CompletionCommandRunner<int>>());
     });

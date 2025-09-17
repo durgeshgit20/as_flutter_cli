@@ -1,0 +1,284 @@
+name: {{appName.snakeCase()}}_workspace
+packages:
+  - app/*
+  - core
+  - features/*
+  - packages/*
+  - plugins/*
+  - shared/*
+
+command:
+  bootstrap:
+    environment:
+      sdk: ">=3.2.3 <4.0.0"
+      flutter: ">=3.3.0"
+    dev_dependencies:
+      build_runner: ^2.4.14
+      mocktail: ^1.0.4
+      very_good_analysis: ^7.0.0
+    hooks:
+      post: melos run initialize-app
+  clean:
+    hooks:
+      post: |
+        melos exec --flutter --concurrency=3 -- "flutter clean"
+        melos run build:clean
+
+scripts:
+  analyze:select:
+    run: melos exec -- "flutter analyze lib test"
+    description: "Perform static analysis on selected packages that depend on Flutter and have a test directory."
+    packageFilters:
+      dependsOn:
+        - "flutter"
+      dirExists: test
+
+  analyze:
+    run: melos run analyze:select --no-select
+    description: "Run static analysis on all packages that depend on Flutter."
+
+  generate-env:
+    run: melos exec -- "dart run build_runner build -d"
+    description: "Generate environment-specific code for all packages using envied_generator."
+    packageFilters:
+      dependsOn:
+        - "envied_generator"
+
+  generate-locale:
+    run: melos exec -- "dart run slang"
+    description: "Generate localization files from JSON for packages using slang and slang_flutter."
+    packageFilters:
+      dependsOn:
+        - "slang"
+        - "slang_flutter"
+        
+  analyze-locale:
+    run: melos exec -- "dart run slang analyze"
+    description: "Analyze localization files."
+    packageFilters:
+      dependsOn:
+        - "slang"
+        - "slang_flutter"
+
+  normalize-locale:
+    run: melos exec -- "dart run slang normalize"
+    description: " Normalize localization files."
+    packageFilters:
+      dependsOn:
+        - "slang"
+        - "slang_flutter"
+
+  generate-assets:
+    run: melos exec -- "fluttergen"
+    description: "Generate asset classes for the UI Kit Package using FlutterGen."
+    packageFilters:
+      scope: "*{{appName.snakeCase()}}_ui_kit*"
+
+  build-app:
+    run: melos exec -- "dart run build_runner build -d"
+    description: "Generate code for the main app using build_runner."
+    packageFilters:
+      scope:
+        - "{{appName.snakeCase()}}"
+
+  build-widgetbook:
+    run: melos exec -- "dart run build_runner build -d"
+    description: "Generate code for Widgetbook using build_runner and widgetbook_generator."
+    packageFilters:
+      dependsOn:
+        - "widgetbook_generator"
+
+  generate-widgetbook-assets:
+    run: melos exec -- "fluttergen"
+    description: "Generate asset classes for Widgetbook using FlutterGen."
+    packageFilters:
+      dependsOn:
+        - "widgetbook_generator"
+
+  build-core:
+    run: melos exec -- "dart run build_runner build -d"
+    description: "Generate code for the core package using build_runner."
+    packageFilters:
+      scope:
+        - "core"
+
+  build:select:
+    run: melos exec -- "dart run build_runner build -d"
+    description: "Run build_runner for selected packages, excluding specific packages and those without build_runner dependency."
+    packageFilters:
+      ignore:
+        - "{{appName.snakeCase()}}"
+        - "*l10n*"
+        - "*config*"
+        - "*core*"
+        - "*_widgetbook"
+        - "*_security"
+        - "*_storage"
+      dependsOn:
+        - "build_runner"
+
+  build:clean:select:
+    run: melos exec -- "dart run build_runner clean"
+    description: "Clean generated files in selected packages that depend on build_runner."
+    packageFilters:
+      dependsOn:
+        - "build_runner"
+
+  build:
+    run: melos run build:select --no-select
+    description: "Run build_runner for all eligible packages in the project."
+    orderDependents: true
+
+  build:clean:
+    run: melos run build:clean:select --no-select
+    description: "Clean generated files in all packages that depend on build_runner."
+
+  get:select:
+    run: melos exec -- "flutter pub get"
+    description: "Get dependencies for selected Flutter packages."
+    packageFilters:
+      dependsOn: flutter
+  get:
+    run: melos run get:select --no-select
+    description: "Get dependencies for all Flutter packages in the project."
+    orderDependents: true
+
+  upgrade:select:
+    run: melos exec -- "flutter pub upgrade"
+    description: "Upgrade dependencies for selected Flutter packages."
+    packageFilters:
+      dependsOn: "flutter"
+  upgrade:
+    run: melos run upgrade:select --no-select
+    description: "Upgrade dependencies for all Flutter packages in the project."
+    orderDependents: true
+
+  fix:select:
+    run: melos exec -- "dart fix --apply"
+    description: "Apply automated fixes to Dart code in selected Flutter packages."
+    packageFilters:
+      dependsOn: "flutter"
+  fix:
+    run: melos run fix:select --no-select
+    description: "Apply automated fixes to Dart code in all Flutter packages."
+
+  test:select:
+    run: melos exec -- "very_good test -j 4 --optimization --coverage --test-randomize-ordering-seed random"
+    description: "Run tests with optimizations and coverage for selected packages with a test directory."
+    packageFilters:
+      dirExists: test
+  test:
+    run: melos run test:select --no-select
+    description: "Run all tests in the project with optimizations and coverage."
+
+  coverage:select:
+    run: melos exec -- very_good test --coverage
+    packageFilters:
+      dirExists: test
+    description: "Generate test coverage for selected packages with a test directory."
+  coverage:
+    run: melos run coverage:select --no-select
+    description: "Generate test coverage for all packages with tests in the project."
+
+  test:with-lcov-coverage:select:
+    run: MELOS_ROOT_PATH/scripts/test-with-coverage.sh MELOS_ROOT_PATH MELOS_PACKAGE_PATH MELOS_PACKAGE_NAME
+    exec:
+      concurrency: 6
+    packageFilters:
+      ignore:
+        - "*l10n*"
+        - "*config*"
+      dirExists: test
+    description: "Run tests and generate LCOV coverage for selected packages, excluding l10n and config."
+
+  test:with-lcov-coverage:
+    run: |
+      melos run test:with-lcov-coverage:select --no-select && \
+      melos run test:combine-coverage
+    description: "Run tests for all packages, generate LCOV coverage, and combine into a single report."
+
+  test:with-html-coverage:select:
+    run: |
+      MELOS_ROOT_PATH/scripts/test-with-coverage.sh MELOS_ROOT_PATH MELOS_PACKAGE_PATH MELOS_PACKAGE_NAME && \
+      melos run test:combine-coverage && \
+      melos run test:generate-html-coverage
+    exec:
+      concurrency: 6
+    packageFilters:
+      ignore:
+        - "*l10n*"
+        - "*config*"
+      dirExists: test
+    description: "Run tests, generate LCOV coverage, and create HTML report for selected packages."
+
+  test:with-html-coverage:
+    run: |
+      melos run test:with-lcov-coverage:select --no-select && \
+      melos run test:combine-coverage && \
+      melos run test:generate-html-coverage
+      echo "🧪📊 You can find coverage report in the following folder: MELOS_ROOT_PATH/coverage_report/index.html\n\n💡To open it just run: open MELOS_ROOT_PATH/coverage_report/index.html"
+    description: "Run tests for all packages, generate combined LCOV and HTML coverage reports."
+
+  test:with-html-coverage:all:auto-open:
+    run: |
+      melos run test:with-lcov-coverage --no-select && \
+      melos run test:combine-coverage && \
+      melos run test:generate-html-coverage
+      open MELOS_ROOT_PATH/coverage_report/index.html
+    description: "Run all tests, generate combined coverage reports, and automatically open HTML report."
+
+  test:combine-coverage:
+    run: MELOS_ROOT_PATH/scripts/combine-coverage.sh MELOS_ROOT_PATH
+    description: "Merge individual LCOV coverage files into a single, project-wide LCOV file."
+    select-package:
+      dir-exists:
+        - test
+        - coverage
+
+  test:generate-html-coverage:
+    run: MELOS_ROOT_PATH/scripts/generate-html-coverage.sh MELOS_ROOT_PATH
+    description: "Convert the combined LCOV file into a user-friendly HTML coverage report."
+    select-package:
+      dir-exists:
+        - test
+        - coverage
+
+  update-goldens:select:
+    run: melos exec -- "very_good test --concurrency=4 --update-goldens --tags=golden"
+    packageFilters:
+      dirExists: test
+      dependsOn: golden_toolkit
+    description: "Update golden test files for selected packages with a test directory."
+  
+  update-goldens:
+    run: melos run update-goldens:select --no-select
+    description: "Update all golden test files across the entire project."
+
+  {{#isUsingFirebase}}
+  generate-firebase-prod:
+    run: MELOS_ROOT_PATH/scripts/generate-firebase-prod.sh MELOS_ROOT_PATH
+    description: "Generate firebase-options for production flavor"
+  generate-firebase-dev:
+    run: MELOS_ROOT_PATH/scripts/generate-firebase-dev.sh MELOS_ROOT_PATH
+    description: "Generate firebase-options for development flavor"
+  generate-firebase-stg:
+    run: MELOS_ROOT_PATH/scripts/generate-firebase-stg.sh MELOS_ROOT_PATH
+    description: "Generate firebase-options for staging flavor"
+  {{/isUsingFirebase}}
+
+  initialize-app:
+    run: |
+      melos run generate-env
+      melos run generate-locale
+      melos run generate-assets
+      melos run build-core
+      melos run build
+      {{#isUsingFirebase}}
+      melos run generate-firebase-prod
+      melos run generate-firebase-dev
+      melos run generate-firebase-stg
+      {{/isUsingFirebase}}
+      melos run build-app
+      melos run generate-widgetbook-assets
+      melos run build-widgetbook
+    description: "Set up {{appName.titleCase()}} by running all necessary code generation and build steps."

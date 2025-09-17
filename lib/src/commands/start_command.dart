@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:archipelago_cli/src/commands/commands.dart';
-import 'package:archipelago_cli/src/domain/domain.dart';
+import 'package:fquick_cli/src/commands/commands.dart';
+import 'package:fquick_cli/src/domain/domain.dart';
 import 'package:args/command_runner.dart';
 import 'package:mason/mason.dart';
 
@@ -28,28 +28,28 @@ class StartCommand extends Command<int> {
     try {
       final melosFileExists = File('melos.yaml').existsSync();
       final availableCommands = [
-        if (!melosFileExists) ArchipelagoCommand.initializeMonorepo,
-        ArchipelagoCommand.generateFeatureSkeleton,
-        ArchipelagoCommand.generateCubitSkeleton,
-        ArchipelagoCommand.generateLocalization,
-        ArchipelagoCommand.generateUIKit,
+        if (!melosFileExists) FQuickCommand.initializeMonorepo,
+        FQuickCommand.generateFeatureSkeleton,
+        FQuickCommand.generateCubitSkeleton,
+        FQuickCommand.generateLocalization,
+        FQuickCommand.generateUIKit,
       ];
 
-      final action = _logger.chooseOne<ArchipelagoCommand>(
+      final action = _logger.chooseOne<FQuickCommand>(
         'What would you like to do today? Choose an option to get started:',
         choices: availableCommands,
         display: (choice) => choice.label,
       );
 
       final result = switch (action) {
-        ArchipelagoCommand.initializeMonorepo =>
+        FQuickCommand.initializeMonorepo =>
           await InitializeMonorepoCommand(logger: _logger).run(),
-        ArchipelagoCommand.generateFeatureSkeleton =>
+        FQuickCommand.generateFeatureSkeleton =>
           await GenerateFeatureSkeletonCommand(logger: _logger).run(),
-        ArchipelagoCommand.generateCubitSkeleton => throw UnimplementedError(),
-        ArchipelagoCommand.generateLocalization =>
+        FQuickCommand.generateCubitSkeleton => throw UnimplementedError(),
+        FQuickCommand.generateLocalization =>
           await GenerateLocalizationPackageCommand(logger: _logger).run(),
-        ArchipelagoCommand.generateUIKit =>
+        FQuickCommand.generateUIKit =>
           await GenerateUIKitCommand(logger: _logger).run(),
       };
 

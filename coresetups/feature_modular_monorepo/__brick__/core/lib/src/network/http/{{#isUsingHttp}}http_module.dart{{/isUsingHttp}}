@@ -1,0 +1,147 @@
+import 'dart:convert';
+
+
+import 'package:core/src/exceptions/exceptions.dart';
+import 'package:core/src/typedef/typedef.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:core/src/network/http/http.dart';
+
+abstract class HttpModule {
+  HttpModule(
+    Client client, {
+    required HttpSetting setting,
+  }) {
+    _client = client;
+    _setting = setting;
+  }
+
+  @protected
+  late Client _client;
+
+  @protected
+  late HttpSetting _setting;
+
+  Map<String, String> get headers => {
+        'Content-Type': _setting.contentType,
+        'Accept': 'application/json',
+      };
+
+  Future<JSON?> _safeCallApi(Future<Response> call) async {
+    try {
+      final response = await call;
+
+      if (response.statusCode != 200) {
+        // TODO: Handle your custom network exceptions
+        throw {{appName.pascalCase()}}Exception(message:response.body);
+      }
+
+      return jsonDecode(response.body) as JSON;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<JSON?> get({
+    required String path,
+    JSON? queryParams,
+    Map<String, String>? requestHeaders,
+  }) =>
+      _safeCallApi(
+        _client.get(
+          Uri.https(
+            _setting.baseUrl,
+            path,
+            queryParams,
+          ),
+          headers: {
+            ...headers,
+            if (requestHeaders != null) ...requestHeaders,
+          },
+        ),
+      );
+
+  Future<JSON?> post({
+    required String path,
+    Object? body,
+    Encoding? encoding,
+    Map<String, String>? requestHeaders,
+  }) =>
+      _safeCallApi(
+        _client.post(
+          Uri.https(
+            _setting.baseUrl,
+            path,
+          ),
+          body: body,
+          encoding: encoding,
+          headers: {
+            ...headers,
+            if (requestHeaders != null) ...requestHeaders,
+          },
+        ),
+      );
+
+  Future<JSON?> put({
+    required String path,
+    Object? body,
+    Encoding? encoding,
+    Map<String, String>? requestHeaders,
+  }) =>
+      _safeCallApi(
+        _client.put(
+          Uri.https(
+            _setting.baseUrl,
+            path,
+          ),
+          body: body,
+          encoding: encoding,
+          headers: {
+            ...headers,
+            if (requestHeaders != null) ...requestHeaders,
+          },
+        ),
+      );
+
+  Future<JSON?> patch({
+    required String path,
+    Object? body,
+    Encoding? encoding,
+    Map<String, String>? requestHeaders,
+  }) =>
+      _safeCallApi(
+        _client.patch(
+          Uri.https(
+            _setting.baseUrl,
+            path,
+          ),
+          body: body,
+          encoding: encoding,
+          headers: {
+            ...headers,
+            if (requestHeaders != null) ...requestHeaders,
+          },
+        ),
+      );
+
+  Future<JSON?> delete({
+    required String path,
+    Object? body,
+    Encoding? encoding,
+    Map<String, String>? requestHeaders,
+  }) =>
+      _safeCallApi(
+        _client.delete(
+          Uri.https(
+            _setting.baseUrl,
+            path,
+          ),
+          body: body,
+          encoding: encoding,
+          headers: {
+            ...headers,
+            if (requestHeaders != null) ...requestHeaders,
+          },
+        ),
+      );
+}

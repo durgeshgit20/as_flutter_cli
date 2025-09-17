@@ -9,20 +9,31 @@ void printWelcomeScreen() {
   const bold = '\x1B[1m';
 
   print('''
-$blue                                  
-    █████  ██████   ██████ ██   ██ ██ ██████  ███████ ██       █████   ██████   ██████  
-   ██   ██ ██   ██ ██      ██   ██ ██ ██   ██ ██      ██      ██   ██ ██       ██    ██ 
-   ███████ ██████  ██      ███████ ██ ██████  █████   ██      ███████ ██   ███ ██    ██ 
-   ██   ██ ██   ██ ██      ██   ██ ██ ██      ██      ██      ██   ██ ██    ██ ██    ██ 
-   ██   ██ ██   ██  ██████ ██   ██ ██ ██      ███████ ███████ ██   ██  ██████   ██████         $reset
+                      $blue                                  
+                      ########          #######  ##     ## ####  ######  ##    ## 
+                      ##               ##     ## ##     ##  ##  ##    ## ##   ##  
+                      ##               ##     ## ##     ##  ##  ##       ##  ##   
+                      ######   ####### ##     ## ##     ##  ##  ##       #####    
+                      ##               ##  ## ## ##     ##  ##  ##       ##  ##   
+                      ##               ##    ##  ##     ##  ##  ##    ## ##   ##  
+                      ##                ##### ##  #######  ####  ######  ##    ##    $reset
 
-$bold                        🏝  Flutter Starter Kit  🚀$reset
+
+
+          $bold                        🏝  Flutter Starter Kit  🚀$reset
 
 $cyan================================================================================$reset
 
-$bold             Welcome to Archipelago - Your Flutter Monorepo Solution
+
+        $bold             Welcome to FQuick - Your Flutter Monorepo Solution
                 
-           $cyan"Like islands connected by water, we connect your packages"$reset
+                   $bold  $cyan"He who climbs the ladder must begin at the bottom!"$reset
+
+                    $bold      $cyan"It’s a waste of life to be scared"$reset
+
+                    $bold$cyan"I’m not number one in anything at this point in time. 
+                 But that’s not enough of a reason to quit, nor is it an excuse."$reset
+                        
 
 $cyan================================================================================$reset
 ''');
@@ -38,13 +49,7 @@ void printFooter() {
   print('''
 $cyan================================================================================$reset
 
-$bold${cyan}For documentation and guides, visit: ${reset}Coming Soon
-$bold${cyan}Need help? Join our Discord: ${reset}https://discord.gg/2gJes2Xcfx
-
-$cyan================================================================================$reset
-
-$bold             "The whole is greater than the sum of its parts" 
-                          - Aristotle$reset
+                               $bold${cyan}Thank you for using FQuick! Happy coding! 🚀${reset}
 
 $cyan================================================================================$reset
 ''');
